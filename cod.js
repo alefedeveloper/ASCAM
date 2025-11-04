@@ -73,6 +73,12 @@ function openTermsModal() {
   if (closeButton) {
     closeButton.focus();
   }
+
+  document
+    .querySelectorAll('[data-modal-target="termsModal"]')
+    .forEach((button) => {
+      button.setAttribute("aria-expanded", "true");
+    });
 }
 
 function closeTermsModal() {
@@ -89,6 +95,47 @@ function closeTermsModal() {
     lastFocusedElement.focus({ preventScroll: true });
     lastFocusedElement = null;
   }
+
+  document
+    .querySelectorAll('[data-modal-target="termsModal"]')
+    .forEach((button) => {
+      button.setAttribute("aria-expanded", "false");
+    });
+}
+
+function updateSubmitState() {
+  const submitBtn = document.querySelector(".btn-submit");
+  const termsCheckbox = document.getElementById("aceito");
+  if (!submitBtn) {
+    return;
+  }
+
+  const requiredIds = [
+    "name",
+    "material",
+    "weight",
+    "street",
+    "neighborhood",
+    "number",
+  ];
+
+  const allFieldsFilled = requiredIds.every((id) => {
+    const field = document.getElementById(id);
+    if (!field) {
+      return false;
+    }
+
+    const value =
+      typeof field.value === "string" ? field.value.trim() : field.value;
+    return Boolean(value);
+  });
+
+  const termsAccepted = termsCheckbox ? termsCheckbox.checked : false;
+  const isValid = allFieldsFilled && termsAccepted;
+
+  submitBtn.disabled = !isValid;
+  submitBtn.classList.toggle("btn-disabled", !isValid);
+  submitBtn.setAttribute("aria-disabled", String(!isValid));
 }
 
 // Fechar menu ao clicar fora
@@ -127,6 +174,22 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
+function handleFieldError(fieldId, message) {
+  alert(message);
+  const field = document.getElementById(fieldId);
+  if (!field) {
+    return;
+  }
+
+  const wrapper = field.closest(".input-wrapper");
+  if (wrapper) {
+    wrapper.classList.add("error");
+  }
+
+  field.focus();
+  updateSubmitState();
+}
+
 // Validação e Envio do Formulário
 function submitForm(event) {
   event.preventDefault();
@@ -149,39 +212,48 @@ function submitForm(event) {
 
   // Validação dos campos obrigatórios
   if (!formData.name) {
-    alert("Por favor, preencha seu nome.");
-    document.getElementById("name").focus();
+    handleFieldError("name", "Por favor, preencha seu nome.");
     return;
   }
 
   if (!formData.material) {
-    alert("Por favor, selecione o tipo de material.");
-    document.getElementById("material").focus();
+    handleFieldError("material", "Por favor, selecione o tipo de material.");
     return;
   }
 
   if (!formData.weight) {
-    alert("Por favor, selecione o peso estimado.");
-    document.getElementById("weight").focus();
+    handleFieldError("weight", "Por favor, selecione o peso estimado.");
     return;
   }
 
   if (!formData.street) {
-    alert("Por favor, preencha o nome da rua.");
-    document.getElementById("street").focus();
+    handleFieldError("street", "Por favor, preencha o nome da rua.");
     return;
   }
 
   if (!formData.neighborhood) {
-    alert("Por favor, preencha o bairro.");
-    document.getElementById("neighborhood").focus();
+    handleFieldError("neighborhood", "Por favor, preencha o bairro.");
     return;
   }
 
   if (!formData.number) {
-    alert("Por favor, preencha o número.");
-    document.getElementById("number").focus();
+    handleFieldError("number", "Por favor, preencha o número.");
     return;
+  }
+
+  const termsCheckbox = document.getElementById("aceito");
+  const termsContainer = document.querySelector(".termos");
+  if (termsCheckbox && !termsCheckbox.checked) {
+    if (termsContainer) {
+      termsContainer.classList.add("error");
+    }
+    alert("Por favor, leia e aceite os termos de uso antes de continuar.");
+    termsCheckbox.focus();
+    return;
+  }
+
+  if (termsContainer) {
+    termsContainer.classList.remove("error");
   }
 
   // Monta o endereço completo
@@ -226,6 +298,7 @@ _Aguardamos a confirmação da coleta!_`;
     const originalText = submitBtn.innerHTML;
     submitBtn.innerHTML = '<span class="btn-icon">✓</span> ENVIANDO...';
     submitBtn.disabled = true;
+    submitBtn.setAttribute("aria-disabled", "true");
 
     // Abre o WhatsApp
     setTimeout(() => {
@@ -246,9 +319,19 @@ _Aguardamos a confirmação da coleta!_`;
       // Reseta o botão
       submitBtn.innerHTML = originalText;
       submitBtn.disabled = false;
+      submitBtn.setAttribute("aria-disabled", "false");
 
       // Limpa o formulário
       document.getElementById("agendamentoForm").reset();
+      document.querySelectorAll(".input-wrapper.error").forEach((wrapper) => {
+        wrapper.classList.remove("error");
+      });
+      const termsGroup = document.querySelector(".termos");
+      if (termsGroup) {
+        termsGroup.classList.remove("error");
+      }
+
+      updateSubmitState();
 
       // Mensagem de sucesso com instruções
       setTimeout(() => {
@@ -319,18 +402,66 @@ document.addEventListener("DOMContentLoaded", () => {
   const inputs = document.querySelectorAll(".form-input");
 
   inputs.forEach((input) => {
-    input.addEventListener("blur", function () {
-      if (this.hasAttribute("required") && !this.value.trim()) {
-        this.style.borderColor = "#dc2626";
-      } else {
-        this.style.borderColor = "#e0e0e0";
+    const getWrapper = () => input.closest(".input-wrapper");
+    const normalizeValue = () =>
+      typeof input.value === "string" ? input.value.trim() : input.value;
+
+    const validateRequired = () => {
+      const wrapper = getWrapper();
+      if (!wrapper) {
+        return;
       }
+
+      if (input.hasAttribute("required") && !normalizeValue()) {
+        wrapper.classList.add("error");
+      } else {
+        wrapper.classList.remove("error");
+      }
+    };
+
+    const clearError = () => {
+      const wrapper = getWrapper();
+      if (wrapper) {
+        wrapper.classList.remove("error");
+      }
+    };
+
+    input.addEventListener("blur", () => {
+      validateRequired();
+      updateSubmitState();
     });
 
-    input.addEventListener("focus", function () {
-      this.style.borderColor = "#228b22";
+    input.addEventListener("focus", () => {
+      clearError();
+    });
+
+    input.addEventListener("input", () => {
+      if (normalizeValue()) {
+        clearError();
+      }
+      updateSubmitState();
+    });
+
+    input.addEventListener("change", () => {
+      if (normalizeValue()) {
+        clearError();
+      }
+      updateSubmitState();
     });
   });
+
+  const termsCheckbox = document.getElementById("aceito");
+  const termsGroup = document.querySelector(".termos");
+  if (termsCheckbox && termsGroup) {
+    termsCheckbox.addEventListener("change", () => {
+      if (termsCheckbox.checked) {
+        termsGroup.classList.remove("error");
+      }
+      updateSubmitState();
+    });
+  }
+
+  updateSubmitState();
 });
 
 // Teste rápido do WhatsApp (apenas para debug)

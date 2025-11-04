@@ -9,6 +9,7 @@
       rel="stylesheet"
     />
     <link href="index.css" rel="stylesheet" />
+    <link rel="shortcut icon" href="./image/LOGOTIPO-ASCAM-MATIPO-ACE-FACULDADE.png" type="image/x-icon">
     <script src="cod.js"></script>
   </head>
   <body>
@@ -166,85 +167,163 @@
       <div class="container">
         <h2 class="section-title">AGENDAR COLETA</h2>
         <div class="form-wrapper">
-          <form id="agendamentoForm">
+          <form id="agendamentoForm" novalidate>
             <div class="form-grid">
               <div class="form-column">
-                <input
-                  type="text"
-                  id="name"
-                  placeholder="Nome *"
-                  class="form-input"
-                  required
-                />
-                <select id="material" class="form-input" required>
-                  <option value="">Selecione o Material *</option>
-                  <option value="Papel">Papel</option>
-                  <option value="Plástico">Plástico</option>
-                  <option value="Metal">Metal</option>
-                  <option value="Vidro">Vidro</option>
-                  <option value="Misto">Misto</option>
-                  <option value="Outros">Outros</option>
-                </select>
-                <select id="weight" class="form-input" required>
-                  <option value="">Peso Estimado *</option>
-                  <option value="Menos de 5 kg">Menos de 5 kg</option>
-                  <option value="5-10 kg">5-10 kg</option>
-                  <option value="10-20 kg">10-20 kg</option>
-                  <option value="Mais de 20 kg">Mais de 20 kg</option>
-                </select>
-                <textarea
-                  id="observation"
-                  placeholder="Observações (opcional)"
-                  class="form-input"
-                  rows="4"
-                ></textarea>
+                <fieldset class="form-fieldset">
+                  <legend class="form-legend">Dados do solicitante</legend>
+                  <div class="form-group">
+                    <label class="form-label" for="name">Nome completo *</label>
+                    <div class="input-wrapper">
+                      <span class="input-icon" aria-hidden="true">👤</span>
+                      <input
+                        type="text"
+                        id="name"
+                        placeholder="Digite seu nome"
+                        class="form-input"
+                        required
+                      />
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="material">Material *</label>
+                    <div class="input-wrapper select-wrapper">
+                      <span class="input-icon" aria-hidden="true">♻️</span>
+                      <select id="material" class="form-input" required>
+                        <option value="">Selecione o material</option>
+                        <option value="Papel">Papel</option>
+                        <option value="Plástico">Plástico</option>
+                        <option value="Metal">Metal</option>
+                        <option value="Vidro">Vidro</option>
+                        <option value="Misto">Misto</option>
+                        <option value="Outros">Outros</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="weight">Peso estimado *</label>
+                    <div class="input-wrapper select-wrapper">
+                      <span class="input-icon" aria-hidden="true">⚖️</span>
+                      <select id="weight" class="form-input" required>
+                        <option value="">Selecione o peso</option>
+                        <option value="Menos de 5 kg">Menos de 5 kg</option>
+                        <option value="5-10 kg">5-10 kg</option>
+                        <option value="10-20 kg">10-20 kg</option>
+                        <option value="Mais de 20 kg">Mais de 20 kg</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="observation">Observações</label>
+                    <div class="input-wrapper textarea-wrapper">
+                      <span class="input-icon" aria-hidden="true">📝</span>
+                      <textarea
+                        id="observation"
+                        placeholder="Informe detalhes importantes (opcional)"
+                        class="form-input"
+                        rows="4"
+                        aria-describedby="observationHint"
+                        style="resize: none;"
+                      ></textarea>
+                    </div>
+                    <p class="form-hint" id="observationHint">
+                      Ajude nossa equipe com orientações extras sobre o local ou os materiais.
+                    </p>
+                  </div>
+                </fieldset>
               </div>
 
               <div class="form-column">
-                <input
-                  type="text"
-                  id="street"
-                  placeholder="Rua *"
-                  class="form-input"
-                  required
-                />
-                <input
-                  type="text"
-                  id="neighborhood"
-                  placeholder="Bairro *"
-                  class="form-input"
-                  required
-                />
-                <input
-                  type="text"
-                  id="number"
-                  placeholder="Número *"
-                  class="form-input"
-                  required
-                />
-                <input
-                  type="text"
-                  id="complement"
-                  placeholder="Complemento (opcional)"
-                  class="form-input"
-                />
-                <div class="termos">
-                  <input type="checkbox" id="aceito" name="aceito" required />
-                  <label for="aceito">Li e aceito os</label>
-                  <button
-                    type="button"
-                    class="terms-link"
-                    data-modal-target="termsModal"
-                  >
-                    termos de uso
-                  </button>
+                <fieldset class="form-fieldset">
+                  <legend class="form-legend">Local da coleta</legend>
+                  <div class="form-group">
+                    <label class="form-label" for="street">Rua *</label>
+                    <div class="input-wrapper">
+                      <span class="input-icon" aria-hidden="true">📍</span>
+                      <input
+                        type="text"
+                        id="street"
+                        placeholder="Informe a rua"
+                        class="form-input"
+                        required
+                      />
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="neighborhood">Bairro *</label>
+                    <div class="input-wrapper">
+                      <span class="input-icon" aria-hidden="true">🏘️</span>
+                      <input
+                        type="text"
+                        id="neighborhood"
+                        placeholder="Informe o bairro"
+                        class="form-input"
+                        required
+                      />
+                    </div>
+                  </div>
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label class="form-label" for="number">Número *</label>
+                      <div class="input-wrapper">
+                        <span class="input-icon" aria-hidden="true">#</span>
+                        <input
+                          type="tel"
+                          maxlength="6"
+                          id="number"
+                          placeholder="Nº"
+                          class="form-input"
+                          required
+                        />
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="form-label" for="complement">Complemento</label>
+                      <div class="input-wrapper">
+                        <span class="input-icon" aria-hidden="true">🔑</span>
+                      <input
+                        type="text"
+                        id="complement"
+                        placeholder="Bloco, apto, etc."
+                        class="form-input"
+                        aria-describedby="complementHint"
+                      />
+                    </div>
+                  </div>
                 </div>
-                <button type="submit" class="btn-submit">
-                  <span class="btn-icon">📞</span>
-                  ENVIAR AGENDAMENTO
-                </button>
+                <p class="form-hint" id="complementHint">
+                  Informe um complemento para facilitar nossa identificação.
+                </p>
+              </fieldset>
+
+                <div class="form-footer">
+                  <div class="termos">
+                    <input type="checkbox" id="aceito" name="aceito" required />
+                    <label for="aceito">Li e aceito os</label>
+                    <button
+                      type="button"
+                      class="terms-link"
+                      data-modal-target="termsModal"
+                      aria-controls="termsModal"
+                      aria-expanded="false"
+                    >
+                      termos de uso
+                    </button>
+                  </div>
+                  <button
+                    type="submit"
+                    class="btn-submit btn-disabled"
+                    disabled
+                    aria-disabled="true"
+                  >
+                    <span class="btn-icon">📞</span>
+                    ENVIAR AGENDAMENTO
+                  </button>
+                  <p class="form-safe">
+                    🔒 Seus dados são usados apenas para o agendamento da coleta.
+                  </p>
+                </div>
               </div>
-              
             </div>
           </form>
         </div>
@@ -317,6 +396,7 @@
             src="TERMO_DE_ACEITE.pdf"
             title="Termos de Uso ASCAM"
             class="modal-pdf"
+            loading="lazy"
           ></iframe>
           <p class="modal-fallback">
             Caso o PDF não carregue, você pode
@@ -328,7 +408,5 @@
       </div>
     </div>
 
-    </form>
-  </div>
   </body>
 </html>
