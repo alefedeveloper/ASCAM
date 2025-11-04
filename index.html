@@ -229,8 +229,15 @@
                   class="form-input"
                 />
                 <div class="termos">
-                      <input type="checkbox" id="aceito" name="aceito" required>
-                    <label for="aceito">Li e aceito os <a href="#">termos de uso</a></label>
+                  <input type="checkbox" id="aceito" name="aceito" required />
+                  <label for="aceito">Li e aceito os</label>
+                  <button
+                    type="button"
+                    class="terms-link"
+                    data-modal-target="termsModal"
+                  >
+                    termos de uso
+                  </button>
                 </div>
                 <button type="submit" class="btn-submit">
                   <span class="btn-icon">📞</span>
@@ -295,6 +302,31 @@
         </div>
       </div>
     </footer>
+
+    <div class="modal" id="termsModal" role="dialog" aria-modal="true" aria-labelledby="termsModalTitle" aria-hidden="true">
+      <div class="modal-backdrop" data-modal-close></div>
+      <div class="modal-content">
+        <header class="modal-header">
+          <h2 id="termsModalTitle">Termos de Uso</h2>
+          <button type="button" class="modal-close" data-modal-close aria-label="Fechar modal">
+            ×
+          </button>
+        </header>
+        <div class="modal-body">
+          <iframe
+            src="TERMO_DE_ACEITE.pdf"
+            title="Termos de Uso ASCAM"
+            class="modal-pdf"
+          ></iframe>
+          <p class="modal-fallback">
+            Caso o PDF não carregue, você pode
+            <a href="TERMO_DE_ACEITE.pdf" target="_blank" rel="noopener">
+              baixar os termos de uso
+            </a>.
+          </p>
+        </div>
+      </div>
+    </div>
 
     </form>
   </div>

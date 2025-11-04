@@ -1,4 +1,5 @@
 const whatsappNumber = "+5531999228922";
+let lastFocusedElement = null;
 
 // Garantir que as funções estejam disponíveis globalmente
 window.scrollToSection = scrollToSection;
@@ -6,6 +7,8 @@ window.scrollToForm = scrollToForm;
 window.toggleMobileMenu = toggleMobileMenu;
 window.closeMobileMenu = closeMobileMenu;
 window.submitForm = submitForm;
+window.openTermsModal = openTermsModal;
+window.closeTermsModal = closeTermsModal;
 
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
   anchor.addEventListener('click', function (e) {
@@ -49,6 +52,45 @@ function closeMobileMenu() {
   }
 }
 
+function openTermsModal() {
+  const modal = document.getElementById("termsModal");
+  if (!modal) {
+    return;
+  }
+
+  const activeElement = document.activeElement;
+  if (activeElement instanceof HTMLElement) {
+    lastFocusedElement = activeElement;
+  } else {
+    lastFocusedElement = null;
+  }
+
+  modal.classList.add("active");
+  modal.setAttribute("aria-hidden", "false");
+  document.body.classList.add("modal-open");
+
+  const closeButton = modal.querySelector(".modal-close");
+  if (closeButton) {
+    closeButton.focus();
+  }
+}
+
+function closeTermsModal() {
+  const modal = document.getElementById("termsModal");
+  if (!modal) {
+    return;
+  }
+
+  modal.classList.remove("active");
+  modal.setAttribute("aria-hidden", "true");
+  document.body.classList.remove("modal-open");
+
+  if (lastFocusedElement instanceof HTMLElement) {
+    lastFocusedElement.focus({ preventScroll: true });
+    lastFocusedElement = null;
+  }
+}
+
 // Fechar menu ao clicar fora
 document.addEventListener("click", function (event) {
   const mobileMenu = document.getElementById("mobileMenu");
@@ -59,6 +101,30 @@ document.addEventListener("click", function (event) {
       closeMobileMenu();
     }
   }
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+  const modal = document.getElementById("termsModal");
+  if (!modal) {
+    return;
+  }
+
+  const openButtons = document.querySelectorAll('[data-modal-target="termsModal"]');
+  const closeButtons = modal.querySelectorAll("[data-modal-close]");
+
+  openButtons.forEach(button => {
+    button.addEventListener("click", openTermsModal);
+  });
+
+  closeButtons.forEach(button => {
+    button.addEventListener("click", closeTermsModal);
+  });
+
+  document.addEventListener("keydown", event => {
+    if (event.key === "Escape" && modal.classList.contains("active")) {
+      closeTermsModal();
+    }
+  });
 });
 
 // Validação e Envio do Formulário

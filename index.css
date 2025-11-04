@@ -648,17 +648,113 @@ textarea.form-input {
 .termos {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: 8px;
   margin-top: 15px;
   font-size: 14px;
   color: #555;
 }
 
-.termos a {
-  color: #007bff;
+.terms-link {
+  border: none;
+  background: none;
+  color: #1b5e20;
+  font-weight: 600;
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 0;
+}
+
+.terms-link:hover {
   text-decoration: none;
 }
 
-.termos a:hover {
-  text-decoration: underline;
+.terms-link:focus {
+  outline: 2px solid #2e7d32;
+  outline-offset: 2px;
+}
+
+body.modal-open {
+  overflow: hidden;
+}
+
+.modal {
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+}
+
+.modal.active {
+  display: flex;
+}
+
+.modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+  position: relative;
+  width: min(90vw, 900px);
+  height: min(90vh, 700px);
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+  background: linear-gradient(135deg, #1b5e20 0%, #2e7d32 100%);
+  color: #fff;
+}
+
+.modal-close {
+  border: none;
+  background: none;
+  color: inherit;
+  font-size: 28px;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0;
+}
+
+.modal-close:focus {
+  outline: 2px solid rgba(255, 255, 255, 0.7);
+  outline-offset: 4px;
+}
+
+.modal-body {
+  flex: 1;
+  padding: 0 24px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.modal-pdf {
+  flex: 1;
+  border: none;
+  width: 100%;
+}
+
+.modal-fallback {
+  font-size: 0.875rem;
+  color: #555;
+  text-align: center;
+}
+
+.modal-fallback a {
+  color: #1b5e20;
+  font-weight: 600;
 }
