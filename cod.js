@@ -1,4 +1,4 @@
-const whatsappNumber = "+5531971795379";
+const whatsappNumber = "+5531971294253";
 let lastFocusedElement = null;
 
 // Garantir que as funções estejam disponíveis globalmente
